@@ -1,0 +1,509 @@
+## Composer
+  Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on
+  and it will manage (install/update) them for you.
+
+++ Installation
+
+	Step 1: https://getcomposer.org/download/
+	Step 2: Download and run Composer-Setup.exe
+	Step 3: Open Windows terminal and type: composer
+
+## Laravel
+  Laravel is a back-end PHP-based and open-source framework used for building a wide range of custom web applications.
+  It's an entirely server-side framework that manages data with the help of Model-View-Controller (MVC) design which breaks
+  an application back-end architecture into logical parts
+
+++ Installation
+	
+	Step 1: composer create-project laravel/laravel name_project --prefer-dist
+	Step 2: cd name_project
+	Step 3: php artisan serve --port 80
+	Step 4: http://127.0.0.1:80 (type on browser)
+
+++ command to install folder vendor
+
+	composer install
+
+## Laravel Folder Structure
+
+	- app : Backend Stuff
+	- config : App Configuration
+	- database : Database Migrations
+	- public : Compiled Resources
+	- resources : JS, SASS....
+	- routes : Website Routes
+	- .env : Enviroment Config
+	- composer.json : PHP Dependencies
+	- package.json : Node Dependencies
+
+## Install package
+
+	composer require package-name
+	Ex: composer require laravel/passport
+
+## Routing
+  Routing in laravel allows you to route all your application requests to its appropriate controller.
+
+	Ex:
+		use Illuminat\Support\Facades\Route;
+
+		Route::get('/greeting', function () {
+			return 'Hello World';
+		});
+
+## Route Parameters
+
+	Route::get('/request-1/{parameter1}/request-2/{parameter2}....', function($param1, $param2) { // code });
+	Ex:
+		Route::get('/students/{id}/age/{age}', function ($id, $age) {
+			return "Student id: ". $id . "and student age: " . $age;
+		});
+## Optional Parameters
+	
+	Route::get('/request/{param?}', function($param = value) { // code });
+	Ex:
+		Route::get(‘/task/{title?}, function($task = null) {
+			return “Task title: “. $task;
+		});
+
+## Regular Expression Contraints
+
+	Route::get('/request/{param}', function($param) {// code })->where('parameter','expression');
+	Ex:
+		Route::get(/'task/{title}', function($task) {
+			return "Task title: " . $task;
+		})->where('title', '[A-Za-z]+');
+
+## Fallback Route
+  Typically, unhandled requests will automatically render a "404" page via your application's exception handler.
+
+	Route::fallback(function() { // code });
+	Ex:
+		Route::fallback(function() {
+			return "404 page not found";
+		});
+
+## Route Prefixes
+  The prefix method may be used to prefix each route in the group with a given URI.
+  For example, you may want to prefix all route URIs within the group with admin
+
+	Route::prefix('request')->group(function() { // code });
+	Ex:
+		Route::prefix('admin')->group(function() {
+			// example: on Browser: localhost:8000/admin/users
+			Route::get('/users'), function() { // code });
+			// example: on Browser: localhost:8000/admin/products
+			Route::get('/products', function() { // code });
+		});
+
+## Web Vs API Routes
+
++ Web : web routes usually return HTML views
+	localhost:80/pathname
+
++ API : API routes usually return data
+	localhost:80/api/pathname
+
+## MVC pattern
+
+++ A View
+     - is used for all the UI logic of the application
+     - includes components such a form elements that the final user interacts with
+     - is useful only for a Web route: for an API route we return only the data to the client
+  To invoke a view, we use the view() function:
+	return view('home', ['username' => 'vy', 'age' => 18]);
+		= view : it returns a HTML file to the client
+		= home : name of the file to invoke (without extension)
+		= ['username' => 'vy', 'age' => 18] : parameters to use to generate the view
+
+## Basic artisan command
+  
+  Artisan is the name of the command-line interface included with Laravel. It provides a number of helpful commands 
+  for your use while developing your application.
+
+++ Command to check Laravel Version
+	
+	php artisan --version
+
+++ Command to run Laravel project
+
+	1. php artisan serve ( default port 8000)
+	2. php artisan serve --port=80
+	3. php artisan serve --port 80
+
+## Create Controller
+++ Command to create Controller Basic
+
+	php artisan make:controller NameController
+	
+** controller name must has the Controller at the end like PostController
+
+++ Command to create Resource Controller
+
+	1. php artisan make:controller NameController --resource
+	2. php artisan make:controller NameController -r
+
+++ Command to create API Controller
+
+	php artisan make:controller NameController --api
+
+## Model
+++ Create model
+
+	php artisan make:model NameModel
+	Ex: php artisan make:model Post
+
+** model name has only one word
+
+## Migration
+  Migration are like version control for your database, allowing your team to define and share the application's
+  database schema definition.
+ 
+++ Create migration
+
+	php artisan make:migration create_table_name_table
+	Ex: php artisan make:migration create_posts_table
+
+** the name of table must be plural
+
+## Create model with migration
+++ Command to create model and migration table
+
+	1. php artisan make:model NameModel --migration
+	2. php artisan make:model NameModel -m
+
+++ Command to create Model, basic controller and Migration table
+
+	php artisan make:model NameModel --all
+	php artisan make:model NameModel -a
+
+++ Command to create Model, Resource controller and Migration table
+
+	php artisan make:model NameModel --migration -- controller -- resource
+	php artisan make:model NameModel -m -c -r	
+	php artisan make:model NameModel -mcr
+
+++ Command to create Model, Api Controller and Migration table
+	
+	php artisan make:model NameModel --migration --controller --api
+	php artisan make:model NameModel -m -c --api
+	php artisan make:model NameModel -mc--api
+
+## Check route list
+++ Command check route list  (all)
+
+	php artisan route:list 
+
+++ Filter the route list by URI
+
+	php artisan route:list --path=pathname
+	Ex: php artisan route:list --path=items
+
+++ Filter the route list by method
+
+	php artisan route:list --method=methodname
+	Ex: php artisan route:list --method=GET
+
+++ Filter the route list by method and URI
+
+	php artisan route:list --path=pathname --method=methodname
+	php artisan route:list --path=items --method=GET
+
+## Migrate table
+  - A migration class contains two methods: up and down. The up method is used to add new tables, columns, or indexes
+  to your database, while the down method should reverse the operations performed by the up method.
+
+  - Laravel Migration is an essential feature in Laravel that allows you to create a table in your database. It allows 
+  you to modify and share the application's database schema. You can modify the table by adding a new column or
+  deleting an existing column.
+
+++ Running Migrations
+	
+	php artisan migrate
+
+## To connect to database
+
+	- go to file .env
+	- put the name of your database on DB_DATABASE = YOUR_DATABASE_NAME
+
+# Migration command
+
+++ The migrate:refresh command is used to rollback all the migrations and then re-run the migrations. Basically, it is
+used to re-create the entire database.
+
+	php artisan migrate:refresh 
+
+++ The migrate:reset command is used to rollback all the migrations, i.e., it drops all the tables that you have
+create in your database.
+
+	php artisan migrate:reset
+
+++ The migrate:rollback is used to rollback the last database migration
+
+	php artisan migrate:rollback
+
+++ The migrate:status command is used to show the status of each migration.
+
+	php artisan migrate:status
+
+## Tinker 
+** Laravel Tinker allows you to interact with a database without creating the routes. Laravel tinker is used with a php
+artisan to create the objects or modify the data.
+
+++ command tinker
+
+	php artisan tinker
+
+## Example to insert data to table
+
+	>>> use App\Models\product;
+	>>> $product = new Product();
+	=> App\Models\Product {#4442}
+
+	>>> $product->name = "Book";
+	=> "Book"
+
+	>>> $product->price = 2
+	=> 2
+
+	>>> $product->save();
+	=> true
+
+to exit Ctrl + C
+
+## Seeder
+
+++ command to create seeder
+
+	php artisan make:seeder NameTableSeeder (name with the end TableSeeder)
+
+++ Process 
+
+	create seeder  -->  add data to seeder  -->  use seeder in DatabaseSeeder
+
+++ Example
+	- file ProductsTableSeeder (seeders)
+	    public function run()
+    		{
+        		$products = [
+            			['name' => 'Mango', 'price' => 10],
+            			['name' => 'Banana', 'price' => 5],
+            			['name' => 'Papaya', 'price' => 5],
+            			['name' => 'Gava', 'price' => 7],
+            			['name' => 'Apple', 'price' => 12]
+        		];
+        		foreach ($products as $product) {
+           		 	Product::create($product);
+        		};
+    		}
+	- file Product (model)
+		protected $fillable = [
+        		'name',
+        		'price',
+    		];
+
+	- file create_products_table (migration)
+    		public function up()
+    		{
+        		Schema::create('products', function (Blueprint $table) {
+            			$table->id();
+            			$table->string('name');
+            			$table->integer('price');
+            			$table->timestamps();
+        		});
+    		}
+	
+	- file DatabaseSeeder (seeders)
+    		public function run()
+    		{
+
+			$this->call(ProductsTableSeeder::class);
+        		// $this->call([ProductsTableSeeder::class, ItemsTableSeeder::class]);
+    		}
+
+++ To run
+
+	- php artisan migrate:reset
+	- php artisan migrate --seed
+
+	- php artisan migrate:refresh
+	- php artisan db:seed
+
+## Factory
+
+++ command to create factory file
+
+	php artisan make:factory NameFactory (name of factory is the same name of Model)
+
+++ Process
+	
+	Create factory  -->  Add data to factory  -->  Use factory in DatabaseSeeder
+** don't forget to import file model to databaseSeeder
+
+++ Example
+
+	- file factory
+		    public function definition()
+    			{
+        			return [
+            				'name' => $this->faker->unique()->sentence(),
+            				'price' => $this->faker->numberBetween(1,100)
+        			];
+    			}
+
+	- file DatabaseSeeder (seeders)
+    		public function run()
+    		{
+
+        		Product::factory(200)->create();
+    		}
+	** 200 is the number of data that we want to insert
+
+++ To run it 
+
+	- php artisan migrate:refresh // delete old data(optional)
+	- php artisan db:seed
+
+
+### Query Builder
+  - Laravel's database query builder provides a convenient, fluent interface to creating and running database queries.
+
+** we use it in controller
+
+  - frist we need to import this to file controller
+	use Illuminate\Support\Facades\DB;
+
+  - Example:
+
+    public function getProduct() {
+        $product = DB::select('SELECT * FROM products');
+        dd($product);
+    }
+
+    public function getProduct() {
+        $allPro = DB::select('SELECT * FROM products');
+        $onePro = DB::selectOne('SELECT * FROM products');
+        $proId = DB::select('SELECT * FROM products WHERE id = 1'); // not secure way
+        $proIds = DB::select('SELECT * FROM products WHERE id = ?', [1]); // MYSQL Prepared Statements
+        $proIdss = DB::select('SELECT * FROM products WHERE id = :id', ['id' => 2]); // PDO Prepared Statements
+        return $proIdss;
+    }
+
+
+  ** dd() is to print array easy to look
+
+## SELECT QUERY BASIC
+
+        $allPro = DB::select('SELECT * FROM table_name');
+        $onePro = DB::selectOne('SELECT * FROM table_name');
+
+##	SELECT QUERY BASIC WITH WHERE CONDITION
+
+        $proId = DB::select('SELECT * FROM table_name WHERE id = value'); // not secure way
+        $proIds = DB::select('SELECT * FROM table_name WHERE id = ?', [value]); // MYSQL Prepared Statements
+        $proIdss = DB::select('SELECT * FROM table_name WHERE id = :id', ['id' => value]); // PDO Prepared Statements
+
+	
+## CRUD BASIC
+
+  - GET
+	DB::select('SELECT * FROM table_name');
+  - POST
+	DB::insert('INSERT INTO table_name (col1, col2,...) VALUES (?,?,...)', [value1,value2,...]); // MySQL Prepared Statements
+	DB::insert('INSERT INTO table_name (col1, col2,...) VALUES (:key1,key2,...)', ['key1' => value1,'key2' => value2,...]);// PDO Prepared Statements
+  - PUT
+	DB::update('UPDATE table_name SET col1 = ?, col2 = ?, ... WHERE id = ?', [value1,value2,value3,....]);// MySQL Prepared Statements
+	DB::update('UPDATE table_name SET col1 = :key1, col2 = :key2, ... WHERE id = :id', ['key1' => value1,'key2' => value2, 'id' => value3,....]);// PDO Prepared Statements
+  - DELETE
+	DB::delete('DELETE FROM table_name WHERE id = ?', [value]);// MySQL Prepared Statements
+	DB::delete('DELETE FROM table_name WHERE id = :id', ['id' => value]);// PDO Prepared Statements
+
+## TABLE QUERY BASIC
+
+	$get = DB::table('table_name')->get();
+        $getonly = DB::table('table_name')->select(col1,col2)->get();
+
+## TABLE QUERY BASIC WITH WHERE CONDITION
+
+        $getId = DB::table('table_name')->where('id', 'compare sign',value)->get();
+        $getIds = DB::table('table_name')->where('id',value)->get();
+        $getIdss = DB::table('table_name')->where('id','=',value)->get();
+
+        $first = DB::table('table_name')->first();
+        $find = DB::table('table_name')->find(value);
+        $value = DB::table(('table_name'))->value(col);
+	$select = DB::table(('table_name'))->select(col1, col2...)->get();
+
+++ function that can use
+	- first()
+	- find(value)
+	- value(col)
+	- whereBetween()
+
+
+++ Query Builder
+
+	DB::table('table_name')->whereBetween(col,[value1,value2])->get();
+	DB::table('table_name')->whereNotBetween(col,[value1,value2])->get();
+	DB::table('table_name')->whereIn(col,[value1,value2,...])->get();
+
+        DB::table('table_name')->orderBy(col)->get();
+        DB::table('table_name')->orderBy(col,'asc or desc')->get();
+        DB::table('table_name')->orderByDesc(col)->get();
+        DB::table('table_name')->inRandomOrder()->get();
+
+++ Math Query
+
+        DB::table('table_name')->count(col);
+        DB::table('table_name')->max(col);
+        DB::table('table_name')->min(col);
+        DB::table('table_name')->sum(col);
+        DB::table('table_name')->avg(col);
+
+	DB::table('table_name')->skip(value)->take(number)->get();
+
+## To get value from 0, 1 to true or false
+
+++ in model 
+	
+	protected $casts = [
+        	'status' => 'boolean'
+    	];
+
+++ in Controller
+
+    public function getInfo() {
+    	return Person::all();
+    }
+
+
+    $item->title =  $request->title(fieldname);
+                       user input
+
+
+1. 
+Item::create($request->all());
+return response()->json(['sms'=>'message..'],201);
+
+2.
+Item::create([
+	'name'=> $request->input('name'),
+	'price' => $request->input('price'),
+]);
+return respone()->json(['sms'=>'message..'],201);
+
+3.
+Item::create([
+	'name'=> $request->name,
+	'price'=> $request->price,
+]);
+return response()->json(['sms'=> 'message..'],201);
+
+4.
+        $post = new Post();
+        $post->title = $request->title;
+        $post->description = $request->description;
+
+        $post->save();
+
+        return response()->json(['message'=>'successful']);
